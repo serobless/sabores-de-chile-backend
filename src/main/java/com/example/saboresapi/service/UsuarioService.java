@@ -2,6 +2,7 @@ package com.example.saboresapi.service;
 
 import com.example.saboresapi.model.Usuario;
 import com.example.saboresapi.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +14,12 @@ import java.util.Optional;
 public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
     
     // Inyección de dependencias por constructor (mejor práctica)
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     
     // Crear usuario
@@ -25,6 +28,12 @@ public class UsuarioService {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new RuntimeException("El email ya está registrado");
         }
+        
+        // Forzar el rol a "CLIENTE" para cualquier nuevo registro desde el endpoint público
+        usuario.setRol("CLIENTE"); 
+        
+        // Encriptar la contraseña antes de guardar
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
     
@@ -54,7 +63,8 @@ public class UsuarioService {
         
         // Solo actualizar password si se proporciona uno nuevo
         if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isEmpty()) {
-            usuarioExistente.setPassword(usuarioActualizado.getPassword());
+            // Encriptar la nueva contraseña
+            usuarioExistente.setPassword(passwordEncoder.encode(usuarioActualizado.getPassword()));
         }
         
         return usuarioRepository.save(usuarioExistente);
