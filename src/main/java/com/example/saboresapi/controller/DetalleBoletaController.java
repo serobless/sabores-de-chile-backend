@@ -18,8 +18,8 @@ public class DetalleBoletaController {
 
     private final DetalleBoletaService detalleBoletaService;
 
-    @PostMapping
-    public ResponseEntity<DetalleBoleta> crear(@RequestBody DetalleBoletaRequest request) {
+    @PostMapping("/crear")
+    public ResponseEntity<?> crear(@RequestBody DetalleBoletaRequest request) {
         try {
             DetalleBoleta detalle = detalleBoletaService.crearDetalle(
                     request.getBoletaId(),
@@ -27,8 +27,8 @@ public class DetalleBoletaController {
                     request.getCantidad()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(detalle);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -39,22 +39,22 @@ public class DetalleBoletaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetalleBoleta> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         try {
             DetalleBoleta detalle = detalleBoletaService.buscarPorId(id);
             return ResponseEntity.ok(detalle);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         try {
             detalleBoletaService.eliminarDetalle(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Detalle de boleta eliminado correctamente.");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

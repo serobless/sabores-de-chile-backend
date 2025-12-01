@@ -20,7 +20,7 @@ public class BoletaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Boleta crearBoleta(Long usuarioId, int total) {
+    public Boleta crearBoleta(Long usuarioId, int total, String mesa, String tipoEntrega, String infoCliente, String metodoPago) {
         try {
             // Validar que el usuario existe
             Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
@@ -34,6 +34,10 @@ public class BoletaService {
             Boleta boleta = Boleta.builder()
                     .usuario(usuario)
                     .total(total)
+                    .mesa(mesa)
+                    .tipoEntrega(tipoEntrega)
+                    .infoCliente(infoCliente)
+                    .metodoPago(metodoPago)
                     .build();
 
             return boletaRepository.save(boleta);

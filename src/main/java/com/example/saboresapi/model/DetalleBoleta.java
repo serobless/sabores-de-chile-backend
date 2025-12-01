@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -25,13 +26,17 @@ public class DetalleBoleta {
     @Column(nullable = false)
     private int precioUnitario;
 
+    @Column(nullable = false)
+    private int subtotal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "boleta_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private Boleta boleta;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producto_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    // Se mantiene la serialización del producto para poder ver sus datos en el detalle
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // <-- ¡Anotación correcta!
     private Producto producto;
 }

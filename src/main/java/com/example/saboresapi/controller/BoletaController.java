@@ -21,7 +21,13 @@ public class BoletaController {
     @PostMapping
     public ResponseEntity<?> crearBoleta(@RequestBody BoletaRequest request) {
         try {
-            Boleta boleta = boletaService.crearBoleta(request.getUsuarioId(), request.getTotal());
+            Boleta boleta = boletaService.crearBoleta(
+                    request.getUsuarioId(),
+                    request.getTotal(),
+                    request.getMesa(),
+                    request.getTipoEntrega(),
+                    request.getInfoCliente(),
+                    request.getMetodoPago());
             return ResponseEntity.status(HttpStatus.CREATED).body(boleta);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -80,6 +86,10 @@ public class BoletaController {
     public static class BoletaRequest {
         private Long usuarioId;
         private int total;
+        private String mesa;
+        private String tipoEntrega;
+        private String infoCliente;
+        private String metodoPago;
 
         public Long getUsuarioId() {
             return usuarioId;
@@ -95,6 +105,38 @@ public class BoletaController {
 
         public void setTotal(int total) {
             this.total = total;
+        }
+
+        public String getMesa() {
+            return mesa;
+        }
+
+        public void setMesa(String mesa) {
+            this.mesa = mesa;
+        }
+
+        public String getTipoEntrega() {
+            return tipoEntrega;
+        }
+
+        public void setTipoEntrega(String tipoEntrega) {
+            this.tipoEntrega = tipoEntrega;
+        }
+
+        public String getInfoCliente() {
+            return infoCliente;
+        }
+
+        public void setInfoCliente(String infoCliente) {
+            this.infoCliente = infoCliente;
+        }
+
+        public String getMetodoPago() {
+            return metodoPago;
+        }
+
+        public void setMetodoPago(String metodoPago) {
+            this.metodoPago = metodoPago;
         }
     }
 }
