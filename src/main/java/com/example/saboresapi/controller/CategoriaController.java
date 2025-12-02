@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categorias")
-@CrossOrigin(origins = "*") // Permitir peticiones desde React
 public class CategoriaController {
 
     private final CategoriaService categoriaService;

@@ -1,5 +1,6 @@
 package com.example.saboresapi.config;
 
+import com.example.saboresapi.model.Role;
 import com.example.saboresapi.model.Usuario;
 import com.example.saboresapi.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -27,24 +28,31 @@ public class DataInitializer implements CommandLineRunner {
                     .nombre("Admin User")
                     .email("admin@sabores.com")
                     .password(passwordEncoder.encode("password123"))
-                    .rol("ADMIN")
+                    .rol(Role.ADMIN)
                     .build();
 
             Usuario vendedor = Usuario.builder()
                     .nombre("Vendedor User")
                     .email("vendedor@sabores.com")
                     .password(passwordEncoder.encode("password123"))
-                    .rol("VENDEDOR")
+                    .rol(Role.VENDEDOR)
                     .build();
 
             Usuario cliente = Usuario.builder()
                     .nombre("Cliente User")
                     .email("cliente@sabores.com")
                     .password(passwordEncoder.encode("password123"))
-                    .rol("CLIENTE")
+                    .rol(Role.CLIENTE)
+                    .build();
+            
+            Usuario mesero = Usuario.builder()
+                    .nombre("Mesero User")
+                    .email("mesero@sabores.com")
+                    .password(passwordEncoder.encode("password123"))
+                    .rol(Role.MESERO)
                     .build();
 
-            usuarioRepository.saveAll(List.of(admin, vendedor, cliente));
+            usuarioRepository.saveAll(List.of(admin, vendedor, cliente, mesero));
             System.out.println("Usuarios de prueba creados correctamente.");
         }
     }

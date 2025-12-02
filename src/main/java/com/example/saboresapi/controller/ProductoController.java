@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/productos")
-@CrossOrigin(origins = "*") // Permitir peticiones desde React
 public class ProductoController {
 
     private final ProductoService productoService;

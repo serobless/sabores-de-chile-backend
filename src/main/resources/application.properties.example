@@ -4,9 +4,9 @@ spring.application.name=saboresapi
 # ===================================
 # CONFIGURACIÓN DE BASE DE DATOS
 # ===================================
-spring.datasource.url=${DB_URL:jdbc:mysql://sabores-chile-db.c65q68gm86ui.us-east-1.rds.amazonaws.com:3306/saboresdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
-spring.datasource.username=${DB_USERNAME:admin}
-spring.datasource.password=${DB_PASSWORD:Sabores2025!}
+spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/saboresdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+spring.datasource.username=${DB_USERNAME:root}
+spring.datasource.password=${DB_PASSWORD:password}
 
 # Configuración adicional de HikariCP (pool de conexiones)
 spring.datasource.hikari.connection-timeout=30000
@@ -36,7 +36,7 @@ app.upload.dir=${user.home}/sabores-api-uploads
 # ===================================
 # CONFIGURACIÓN JWT
 # ===================================
-jwt.secret=${JWT_SECRET:miClaveSecretaSuperSegura123456789012345678901234567890}
+jwt.secret=${JWT_SECRET:your-secret-key-here-change-this-in-production-minimum-256-bits}
 jwt.expiration=${JWT_EXPIRATION:86400000}
 
 # ===================================

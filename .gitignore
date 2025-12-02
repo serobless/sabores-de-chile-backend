@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment and Configuration Files ###
+application.properties
+application-*.properties
+!application.properties.example
+.env
+.env.local
+.env.*.local
+
+### Upload directories ###
+uploads/
+sabores-api-uploads/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log

@@ -1,7 +1,13 @@
 package com.example.saboresapi.controller;
 
-import com.example.saboresapi.model.Usuario;
+import com.example.saboresapi.dto.UsuarioRequestDTO;
+import com.example.saboresapi.dto.UsuarioResponseDTO;
+import com.example.saboresapi.dto.UsuarioUpdateDTO;
 import com.example.saboresapi.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,70 +16,46 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
-@CrossOrigin(origins = "*") // Permitir peticiones desde React
+@RequiredArgsConstructor
+@Tag(name = "Usuarios", description = "API para gestión de usuarios")
 public class UsuarioController {
-    
+
     private final UsuarioService usuarioService;
-    
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
-    
-    // POST - Crear usuario
-    // http://localhost:8080/api/v1/usuarios
+
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        try {
-            Usuario nuevoUsuario = usuarioService.crearUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    @Operation(summary = "Crear usuario (solo ADMIN)")
+    public ResponseEntity<UsuarioResponseDTO> crearUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioDTO) {
+        UsuarioResponseDTO nuevoUsuario = usuarioService.crearUsuarioAdmin(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
-    
-    // GET - Listar todos los usuarios
-    // http://localhost:8080/api/v1/usuarios
+
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarTodos() {
-        List<Usuario> usuarios = usuarioService.listarTodos();
+    @Operation(summary = "Listar todos los usuarios")
+    public ResponseEntity<List<UsuarioResponseDTO>> listarTodos() {
+        List<UsuarioResponseDTO> usuarios = usuarioService.listarTodos();
         return ResponseEntity.ok(usuarios);
     }
-    
-    // GET - Buscar usuario por ID
-    // http://localhost:8080/api/v1/usuarios/1
+
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-        try {
-            Usuario usuario = usuarioService.buscarPorId(id);
-            return ResponseEntity.ok(usuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Buscar usuario por ID")
+    public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) {
+        UsuarioResponseDTO usuario = usuarioService.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
     }
-    
-    // PUT - Actualizar usuario
-    // http://localhost:8080/api/v1/usuarios/1
+
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(
-            @PathVariable Long id, 
-            @RequestBody Usuario usuario) {
-        try {
-            Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, usuario);
-            return ResponseEntity.ok(usuarioActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @Operation(summary = "Actualizar usuario")
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(
+            @PathVariable Long id,
+            @Valid @RequestBody UsuarioUpdateDTO usuarioDTO) {
+        UsuarioResponseDTO usuarioActualizado = usuarioService.actualizarUsuario(id, usuarioDTO);
+        return ResponseEntity.ok(usuarioActualizado);
     }
-    
-    // DELETE - Eliminar usuario
-    // http://localhost:8080/api/v1/usuarios/1
+
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar usuario")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
-        try {
-            usuarioService.eliminarUsuario(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }

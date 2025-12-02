@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/boletas")
-@CrossOrigin(origins = "*")
 public class BoletaController {
 
     @Autowired
